@@ -9,14 +9,8 @@ export function shuffle(list) {
 // Handling the phrases array
 // --------------------------------------------------
 
-// return all phrases from a list that are made up of 2 words
-function getTwoWordPhrases(phrases) {
-  // TODO
-}
-
-// return all phrases from a list that are made up of 3 words
-function getThreeWordPhrases(phrases) {
-  // TODO
+function getAllPhrasesOfLength(phrases, len) {
+  return phrases.filter((phrase) => phrase.split(" ").length === len);
 }
 
 // returns a random "count" number of phrases from the given list
@@ -24,12 +18,12 @@ function getThreeWordPhrases(phrases) {
 // count must be an even positive integer
 export function getRandomSetOfPhrases(phrases, count) {
   // length 2
-  var lengthTwo = getTwoWordPhrases(phrases);
+  var lengthTwo = getAllPhrasesOfLength(phrases, 2);
   shuffle(lengthTwo); // shuffle order
   var lengthTwo = lengthTwo.slice(0, count / 2); // get half of our answers from here
 
   // length 3
-  var lengthThree = getThreeWordPhrases(phrases);
+  var lengthThree = getAllPhrasesOfLength(phrases, 3);
   shuffle(lengthThree); // shuffle order
   var lengthThree = lengthThree.slice(0, count / 2); // get the other half
 
