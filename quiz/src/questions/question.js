@@ -1,23 +1,53 @@
 import phrases from "./phrases";
-import { stylePhrase, getRandomSetOfPhrases } from "./phrase";
+import {
+  stylePhrase,
+  getRandomSetOfPhrases,
+  getPhraseVariation,
+} from "./phrase";
 
 // takes a given phrase and generates a question with "numOfAnswers"
 // possible answers in the given style (kebab or camel)
 function createQuestion(phrase, style, numOfAnswers = 4) {
-  // a question is composed of:
-  // - phrase: original phrase
-  // - answers: 4 options
-  var answers = [];
+  var question = {
+    phrase: phrase, // original phrase
+    options: [], // 4 possible answers (including the correct one)
+    solution: null, // index in the array of the correct answer
+    selected: null, // answer selected by the user
+    time: 0, // time taken to answer the question in seconds
+  };
+  question.seal();
   const correctAnswer = stylePhrase(phrase, style);
-  answers.push(correctAnswer);
+  question.options.push(correctAnswer);
 
   // create numOfAnswers - 1 wrong answers
   numOfAnswers--;
-  for (let i = 0; i < numOfAnswers; i++) {}
+  for (let i = 0; i < numOfAnswers; i++) {
+    question.options.push(stylePhrase(getPhraseVariation(phrase), style));
+  }
+  question.options.sort((a, b) => 0.5 - Math.random()); // shuffle answers
+
+  // get correct solution index
+  question.solution = question.options.findIndex((e) => e === correctAnswer);
+
+  return question;
 }
 
 // creates a "count" number of quiz questions
-function createQuizQuestions(count) {
-  const phrases = getRandomSetOfPhrases(phrases, count);
-  // TODO
+// count must be an even positive integer
+export function createQuizQuestions(count) {
+  var questions = [];
+  const phraseList = getRandomSetOfPhrases(phrases, count);
+
+  // create questions
+  for (let i = 0; i < phraseList.length; i++) {
+    const phrase = phraseList[i];
+    if (i < phraseList.length / 2) {
+      questions.push(createQuestion(phrase, "kebab"));
+    } else {
+      questions.push(createQuestion(phrase, "camel"));
+    }
+  }
+
+  questions.sort((a, b) => 0.5 - Math.random()); // shuffle order of questions
+  return questions;
 }

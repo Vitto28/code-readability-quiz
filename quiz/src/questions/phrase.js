@@ -17,6 +17,7 @@ function getThreeWordPhrases(phrases) {
 // returns a random "count" number of phrases from a list
 export function getRandomSetOfPhrases(phrases, count) {
   // TODO
+  return [];
 }
 
 // --------------------------------------------------
@@ -50,9 +51,13 @@ function createCamelStylePhrase(phrase) {
 
 // takes a full phrase and rewrites it in the given style
 export function stylePhrase(phrase, style) {
-  return style === "kebab"
-    ? createKebabStylePhrase(phrase)
-    : createCamelStylePhrase(phrase);
+  if (style === "kebab") {
+    return createKebabStylePhrase(phrase);
+  } else if (style === "camel") {
+    createCamelStylePhrase(phrase);
+  } else {
+    return null;
+  }
 }
 
 // calculates the edit distance between two strings, ie, the minimum number of
@@ -94,7 +99,7 @@ function cleanString(str) {
 // modify one of the words (if specified, the one at "index") that make up a
 // given phrase the modified word is "editDistance" changes away from the original
 // if "editDistance" is not set, the distance between the words is random
-function getPhraseVariation(phrase, index = null, editDistance = null) {
+export function getPhraseVariation(phrase, index = null, editDistance = null) {
   var words = getWords(phrase);
   const targetWordIdx = index || getRandomInt(words.length);
   var targetWord = words[targetWordIdx];
