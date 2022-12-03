@@ -3,6 +3,7 @@ import {
   stylePhrase,
   getRandomSetOfPhrases,
   getPhraseVariation,
+  shuffle,
 } from "./phrase";
 
 // takes a given phrase and generates a question with "numOfAnswers"
@@ -24,7 +25,7 @@ function createQuestion(phrase, style, numOfAnswers = 4) {
   for (let i = 0; i < numOfAnswers; i++) {
     question.options.push(stylePhrase(getPhraseVariation(phrase), style));
   }
-  question.options.sort((a, b) => 0.5 - Math.random()); // shuffle answers
+  shuffle(question.options); // shuffle answers
 
   // get correct solution index
   question.solution = question.options.findIndex((e) => e === correctAnswer);
@@ -32,7 +33,7 @@ function createQuestion(phrase, style, numOfAnswers = 4) {
   return question;
 }
 
-// creates a "count" number of quiz questions
+// creates a "count" number of quiz questions, each half of a different case style
 // count must be an even positive integer
 export function createQuizQuestions(count) {
   var questions = [];
@@ -48,6 +49,6 @@ export function createQuizQuestions(count) {
     }
   }
 
-  questions.sort((a, b) => 0.5 - Math.random()); // shuffle order of questions
+  shuffle(questions); // shuffle order of questions
   return questions;
 }

@@ -1,5 +1,10 @@
 import axios from "axios";
 
+// shuffles the order of the elements inside a list/array
+export function shuffle(list) {
+  list.sort((a, b) => 0.5 - Math.random());
+}
+
 // --------------------------------------------------
 // Handling the phrases array
 // --------------------------------------------------
@@ -14,10 +19,24 @@ function getThreeWordPhrases(phrases) {
   // TODO
 }
 
-// returns a random "count" number of phrases from a list
+// returns a random "count" number of phrases from the given list
+// each half consist of 2 or 3 length phrases, respectively
+// count must be an even positive integer
 export function getRandomSetOfPhrases(phrases, count) {
-  // TODO
-  return [];
+  // length 2
+  var lengthTwo = getTwoWordPhrases(phrases);
+  shuffle(lengthTwo); // shuffle order
+  var lengthTwo = lengthTwo.slice(0, count / 2); // get half of our answers from here
+
+  // length 3
+  var lengthThree = getThreeWordPhrases(phrases);
+  shuffle(lengthThree); // shuffle order
+  var lengthThree = lengthThree.slice(0, count / 2); // get the other half
+
+  var allPhrases = lengthTwo.concat(lengthThree);
+  shufflea(allPhrases);
+
+  return allPhrases;
 }
 
 // --------------------------------------------------
@@ -110,7 +129,7 @@ export function getPhraseVariation(phrase, index = null, editDistance = null) {
   axios.get(url).then((response) => {
     var candidates = response.slice(0, 31); // get first 30 answers
     candidates.shift(); // remove first result
-    candidates.sort((a, b) => 0.5 - Math.random()); // shuffle them
+    shuffle(candidates); // shuffle them
 
     if (!editDistance) return cleanString(candidates[0]);
 
