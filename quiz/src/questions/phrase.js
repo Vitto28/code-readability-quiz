@@ -55,7 +55,6 @@ function createKebabStylePhrase(phrase) {
 
 // takes a phrase and rewrites it in camelCase
 function createCamelStylePhrase(phrase) {
-  console.log(phrase);
   var words = getWords(phrase);
   var finalPhrase = words.shift();
   for (let i = 0; i < words.length; i++) {
@@ -66,8 +65,6 @@ function createCamelStylePhrase(phrase) {
 
 // takes a full phrase and rewrites it in the given style
 export function stylePhrase(phrase, style) {
-  console.log("in stylePhrase");
-  console.log(phrase);
   if (style === "kebab") {
     return createKebabStylePhrase(phrase);
   } else if (style === "camel") {
@@ -95,39 +92,43 @@ export async function getPhraseVariation(
   } else {
     params.sp = targetWord;
   }
-  axios
-    .get("https://api.datamuse.com/words", params)
-    .then((response) => {
-      var candidates = response.data.slice(0, 31); // get first 30 answers
-      candidates.shift(); // remove first result
-      shuffle(candidates); // shuffle them
 
-      if (!editDistance) {
-        words[targetWordIdx] = cleanString(candidates[0].word);
-      } else {
-        // look for candidate that satisfies it
-        for (let i = 0; i < candidates.length; i++) {
-          var candidateWord = candidates[i].word;
-          if (computeEditDistance(candidateWord, targetWord) == editDistance) {
-            words[targetWordIdx] = cleanString(candidateWord);
-            break;
+  return new Promise((resolve, reject) => {
+    axios
+      .get("https://api.datamuse.com/words", { params })
+      .then((response) => {
+        var candidates = response.data.slice(0, 31); // get first 30 answers
+        candidates.shift(); // remove first result
+        shuffle(candidates); // shuffle them
+
+        if (!editDistance) {
+          words[targetWordIdx] = cleanString(candidates[0].word);
+        } else {
+          // look for candidate that satisfies it
+          for (let i = 0; i < candidates.length; i++) {
+            var candidateWord = candidates[i].word;
+            if (
+              computeEditDistance(candidateWord, targetWord) == editDistance
+            ) {
+              words[targetWordIdx] = cleanString(candidateWord);
+              break;
+            }
           }
         }
-      }
-      // reconstruct phrase as a single string
-      var newPhrase = words.shift();
-      for (let i = 0; i < words.length; i++) {
-        newPhrase += " " + words[i];
-      }
+        // reconstruct phrase as a single string
+        var newPhrase = words.shift();
+        for (let i = 0; i < words.length; i++) {
+          newPhrase += " " + words[i];
+        }
 
-      newPhrase = "FUCK";
-      console.log("newPhrase: " + newPhrase);
-      return newPhrase;
-    })
-    .catch((error) => {
-      // console.log(error);
-      console.log("An error ocurred during axios request");
-    });
+        return resolve(newPhrase);
+      })
+      .catch((error) => {
+        console.log("An error ocurred during axios request");
+        console.log(error);
+        return reject(error);
+      });
+  });
 }
 
 // calculates the edit distance between two strings, ie, the minimum number of

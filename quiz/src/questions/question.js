@@ -8,7 +8,6 @@ import {
 // takes a given phrase and generates a question with "numOfAnswers"
 // possible answers in the given style (kebab or camel)
 async function createQuestion(phrase, style, numOfAnswers = 4) {
-  console.log("in createQuestion");
   var question = {
     phrase: phrase, // original phrase
     options: [], // 4 possible answers (including the correct one)
@@ -16,18 +15,13 @@ async function createQuestion(phrase, style, numOfAnswers = 4) {
     selected: null, // answer selected by the user
     time: 0, // time taken to answer the question in seconds
   };
-  console.log("before setting correctAnswer");
-  console.log(phrase);
   const correctAnswer = stylePhrase(phrase, style);
   question.options.push(correctAnswer);
 
   // create numOfAnswers - 1 wrong answers
   numOfAnswers--;
   for (let i = 0; i < numOfAnswers; i++) {
-    console.log("beforecalling getvaraition");
     var variation = await getPhraseVariation(phrase);
-    console.log("after getvaraition");
-    console.log("vari: " + variation);
     question.options.push(stylePhrase(variation, style));
   }
   shuffle(question.options); // shuffle answers

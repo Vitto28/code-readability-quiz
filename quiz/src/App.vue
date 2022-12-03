@@ -2,7 +2,6 @@
   <v-app>
     <v-main>
       <h1>Hello World!</h1>
-      <v-btn @click="callit">click me</v-btn>
     </v-main>
   </v-app>
 </template>
@@ -13,10 +12,9 @@ import { createQuizQuestions } from "@/questions/question.js";
 export default {
   name: "App",
 
-  methods: {
-    callit() {
-      var questions = createQuizQuestions(phrases, 4);
-    },
+  async mounted() {
+    var questions = await createQuizQuestions(phrases, 4);
+    console.log(questions);
   },
 };
 </script>
