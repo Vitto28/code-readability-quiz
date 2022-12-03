@@ -2,6 +2,15 @@
   <v-app>
     <v-main>
       <h1>Hello World!</h1>
+
+      <div class="quiz">
+        <div v-for="(question, i) in questions" :key="i" class="question">
+          <h2>{{ question.phrase }}</h2>
+          <ul>
+            <li v-for="(op, i) in question.options" :key="i">{{ op }}</li>
+          </ul>
+        </div>
+      </div>
     </v-main>
   </v-app>
 </template>
@@ -13,8 +22,17 @@ export default {
   name: "App",
 
   async mounted() {
-    var questions = await createQuizQuestions(phrases, 4);
-    console.log(questions);
+    var q = await createQuizQuestions(phrases, 4);
+    setTimeout(() => {
+      this.questions = q;
+    }, 500);
+    console.log(q);
+  },
+
+  data() {
+    return {
+      questions: [],
+    };
   },
 };
 </script>

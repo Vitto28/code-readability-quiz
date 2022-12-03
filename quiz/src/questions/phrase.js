@@ -73,7 +73,7 @@ export function stylePhrase(phrase, style) {
   if (style === "kebab") {
     return createKebabStylePhrase(phrase);
   } else if (style === "camel") {
-    createCamelStylePhrase(phrase);
+    return createCamelStylePhrase(phrase);
   } else {
     return null;
   }
@@ -82,6 +82,7 @@ export function stylePhrase(phrase, style) {
 // modify one of the words (if specified, the one at "index") that make up a
 // given phrase the modified word is "editDistance" changes away from the original
 // if "editDistance" is not set, the distance between the words is random
+// TODO: Fix issue where the same variation may show up multiple times
 export async function getPhraseVariation(
   phrase,
   index = null,

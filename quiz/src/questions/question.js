@@ -21,7 +21,7 @@ async function createQuestion(phrase, style, numOfAnswers = 4) {
   // create numOfAnswers - 1 wrong answers
   numOfAnswers--;
   for (let i = 0; i < numOfAnswers; i++) {
-    var variation = await getPhraseVariation(phrase);
+    var variation = await getPhraseVariation(phrase, null, 1);
     question.options.push(stylePhrase(variation, style));
   }
   shuffle(question.options); // shuffle answers
