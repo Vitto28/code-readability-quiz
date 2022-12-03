@@ -9,8 +9,9 @@ export function shuffle(list) {
 // Handling the phrases array
 // --------------------------------------------------
 
-function getAllPhrasesOfLength(phrases, len) {
-  return phrases.filter((phrase) => phrase.split(" ").length === len);
+// returns an array of all phrases in the given list whose word count equals "count"
+function getAllPhrasesOfLength(phrases, count) {
+  return phrases.filter((phrase) => phrase.split(" ").length === count);
 }
 
 // returns a random "count" number of phrases from the given list
