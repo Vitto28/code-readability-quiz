@@ -29,7 +29,7 @@ export function getRandomSetOfPhrases(phrases, count) {
   var lengthThree = lengthThree.slice(0, count / 2); // get the other half
 
   var allPhrases = lengthTwo.concat(lengthThree);
-  shufflea(allPhrases);
+  shuffle(allPhrases);
 
   return allPhrases;
 }
@@ -39,7 +39,7 @@ export function getRandomSetOfPhrases(phrases, count) {
 // --------------------------------------------------
 
 // get an array of the words that make up a phrase
-function getWords(phrase) {
+export function getWords(phrase) {
   return phrase.split(" ");
 }
 
@@ -47,24 +47,27 @@ function getWords(phrase) {
 function createKebabStylePhrase(phrase) {
   const words = getWords(phrase);
   var finalPhrase = words.shift();
-  for (var word in words) {
-    finalPhrase += "-" + word;
+  for (let i = 0; i < words.length; i++) {
+    finalPhrase += "-" + words[i];
   }
   return finalPhrase;
 }
 
 // takes a phrase and rewrites it in camelCase
 function createCamelStylePhrase(phrase) {
+  console.log(phrase);
   var words = getWords(phrase);
   var finalPhrase = words.shift();
-  for (var word in words) {
-    finalPhrase += word.charAt(0).toUpperCase() + str.slice(1);
+  for (let i = 0; i < words.length; i++) {
+    finalPhrase += words[i].charAt(0).toUpperCase() + words[i].slice(1);
   }
   return finalPhrase;
 }
 
 // takes a full phrase and rewrites it in the given style
 export function stylePhrase(phrase, style) {
+  console.log("in stylePhrase");
+  console.log(phrase);
   if (style === "kebab") {
     return createKebabStylePhrase(phrase);
   } else if (style === "camel") {
@@ -72,6 +75,59 @@ export function stylePhrase(phrase, style) {
   } else {
     return null;
   }
+}
+
+// modify one of the words (if specified, the one at "index") that make up a
+// given phrase the modified word is "editDistance" changes away from the original
+// if "editDistance" is not set, the distance between the words is random
+export async function getPhraseVariation(
+  phrase,
+  index = null,
+  editDistance = null
+) {
+  var words = getWords(phrase);
+  const targetWordIdx = index || getRandomInt(words.length);
+  var targetWord = words[targetWordIdx];
+
+  var params = {};
+  if (targetWord.length < 5) {
+    params.sl = targetWord;
+  } else {
+    params.sp = targetWord;
+  }
+  axios
+    .get("https://api.datamuse.com/words", params)
+    .then((response) => {
+      var candidates = response.data.slice(0, 31); // get first 30 answers
+      candidates.shift(); // remove first result
+      shuffle(candidates); // shuffle them
+
+      if (!editDistance) {
+        words[targetWordIdx] = cleanString(candidates[0].word);
+      } else {
+        // look for candidate that satisfies it
+        for (let i = 0; i < candidates.length; i++) {
+          var candidateWord = candidates[i].word;
+          if (computeEditDistance(candidateWord, targetWord) == editDistance) {
+            words[targetWordIdx] = cleanString(candidateWord);
+            break;
+          }
+        }
+      }
+      // reconstruct phrase as a single string
+      var newPhrase = words.shift();
+      for (let i = 0; i < words.length; i++) {
+        newPhrase += " " + words[i];
+      }
+
+      newPhrase = "FUCK";
+      console.log("newPhrase: " + newPhrase);
+      return newPhrase;
+    })
+    .catch((error) => {
+      // console.log(error);
+      console.log("An error ocurred during axios request");
+    });
 }
 
 // calculates the edit distance between two strings, ie, the minimum number of
@@ -101,47 +157,11 @@ function computeEditDistance(str1, str2) {
 }
 
 // get a random integer between 0 and max (exclusive)
-function getRandomInt(max) {
+export function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
 
 // removes numbers, whitespaces, and special characters from a string
 function cleanString(str) {
   return str.replace(/[^a-zA-Z]/g, "");
-}
-
-// modify one of the words (if specified, the one at "index") that make up a
-// given phrase the modified word is "editDistance" changes away from the original
-// if "editDistance" is not set, the distance between the words is random
-export function getPhraseVariation(phrase, index = null, editDistance = null) {
-  var words = getWords(phrase);
-  const targetWordIdx = index || getRandomInt(words.length);
-  var targetWord = words[targetWordIdx];
-  const url =
-    "api.datamuse.com/words?" +
-    (targetWord.length < 5 ? "sl=" : "sp=") +
-    targetWord;
-  axios.get(url).then((response) => {
-    var candidates = response.slice(0, 31); // get first 30 answers
-    candidates.shift(); // remove first result
-    shuffle(candidates); // shuffle them
-
-    if (!editDistance) return cleanString(candidates[0]);
-
-    // if editDistance set, look for candidate that satisfies it
-    for (let i = 0; i < candidates.length; i++) {
-      var candidateWord = candidates[i].word;
-      if (computeEditDistance(candidateWord, targetWord) == editDistance) {
-        words[targetWordIdx] = cleanString(candidateWord);
-        break;
-      }
-    }
-
-    // reconstruct phrase as a single string
-    var newPhrase = words.shift();
-    for (var word in words) {
-      newPhrase += " " + word;
-    }
-    return newPhrase;
-  });
 }

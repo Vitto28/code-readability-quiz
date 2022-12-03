@@ -1,4 +1,3 @@
-import phrases from "./phrases";
 import {
   stylePhrase,
   getRandomSetOfPhrases,
@@ -8,7 +7,8 @@ import {
 
 // takes a given phrase and generates a question with "numOfAnswers"
 // possible answers in the given style (kebab or camel)
-function createQuestion(phrase, style, numOfAnswers = 4) {
+async function createQuestion(phrase, style, numOfAnswers = 4) {
+  console.log("in createQuestion");
   var question = {
     phrase: phrase, // original phrase
     options: [], // 4 possible answers (including the correct one)
@@ -16,14 +16,19 @@ function createQuestion(phrase, style, numOfAnswers = 4) {
     selected: null, // answer selected by the user
     time: 0, // time taken to answer the question in seconds
   };
-  question.seal();
+  console.log("before setting correctAnswer");
+  console.log(phrase);
   const correctAnswer = stylePhrase(phrase, style);
   question.options.push(correctAnswer);
 
   // create numOfAnswers - 1 wrong answers
   numOfAnswers--;
   for (let i = 0; i < numOfAnswers; i++) {
-    question.options.push(stylePhrase(getPhraseVariation(phrase), style));
+    console.log("beforecalling getvaraition");
+    var variation = await getPhraseVariation(phrase);
+    console.log("after getvaraition");
+    console.log("vari: " + variation);
+    question.options.push(stylePhrase(variation, style));
   }
   shuffle(question.options); // shuffle answers
 
@@ -35,17 +40,19 @@ function createQuestion(phrase, style, numOfAnswers = 4) {
 
 // creates a "count" number of quiz questions, each half of a different case style
 // count must be an even positive integer
-export function createQuizQuestions(count) {
+export async function createQuizQuestions(phrases, count) {
   var questions = [];
   const phraseList = getRandomSetOfPhrases(phrases, count);
 
   // create questions
   for (let i = 0; i < phraseList.length; i++) {
-    const phrase = phraseList[i];
+    var phrase = phraseList[i];
     if (i < phraseList.length / 2) {
-      questions.push(createQuestion(phrase, "kebab"));
+      var question = await createQuestion(phrase, "kebab");
+      questions.push(question);
     } else {
-      questions.push(createQuestion(phrase, "camel"));
+      var question = await createQuestion(phrase, "camel");
+      questions.push(question);
     }
   }
 
