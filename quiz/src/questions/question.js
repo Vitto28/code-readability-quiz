@@ -1,3 +1,5 @@
+import axios from "axios";
+
 // get an array of the words that make up a phrase
 function getWords(phrase) {
   return phrase.split(" ");
@@ -68,7 +70,32 @@ function getPhraseVariation(phrase, index = null, editDistance = null) {
   var words = getWords(phrase);
   const targetWordIdx = index || getRandomInt(words.length);
   var targetWord = words[targetWordIdx];
-  // TODO
+  const url =
+    "api.datamuse.com/words?" +
+    (targetWord.length < 5 ? "sl=" : "sp=") +
+    targetWord;
+  axios.get(url).then((response) => {
+    var candidates = response.slice(0, 30); // get first 30 answers
+    candidates.sort((a, b) => 0.5 - Math.random()); // shuffle them
+
+    if (!editDistance) return candidates[0];
+
+    // if editDistance set, look for candidate that satisfies it
+    for (let i = 0; i < candidates.length; i++) {
+      var candidateWord = candidates[i];
+      if (computeEditDistance(candidateWord, targetWord) == editDistance) {
+        words[targetWordIdx] = candidateWord;
+        break;
+      }
+    }
+
+    // reconstruct phrase as a single string
+    var newPhrase = words.shift();
+    for (var word in words) {
+      newPhrase += " " + word;
+    }
+    return newPhrase;
+  });
 }
 
 // takes a given phrase and generates a question with "numOfAnswers"
