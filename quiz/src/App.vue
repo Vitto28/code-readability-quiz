@@ -1,25 +1,23 @@
 <template>
-  <h1>Hello World!</h1>
+  <v-app>
+    <v-main>
+      <HelloWorld/>
+    </v-main>
+  </v-app>
 </template>
 
 <script>
-export default {
-  data() {
-    return {};
-  },
-};
-</script>
+import HelloWorld from './components/HelloWorld.vue'
 
-<style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+export default {
+  name: 'App',
+
+  components: {
+    HelloWorld,
+  },
+
+  data: () => ({
+    //
+  }),
 }
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-}
-</style>
+</script>
