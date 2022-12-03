@@ -15,7 +15,7 @@ function getThreeWordPhrases(phrases) {
 }
 
 // returns a random "count" number of phrases from a list
-function getRandomSetOfPhrases(phrases, count) {
+export function getRandomSetOfPhrases(phrases, count) {
   // TODO
 }
 
@@ -86,6 +86,11 @@ function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
 
+// removes numbers, whitespaces, and special characters from a string
+function cleanString(str) {
+  return str.replace(/[^a-zA-Z]/g, "");
+}
+
 // modify one of the words (if specified, the one at "index") that make up a
 // given phrase the modified word is "editDistance" changes away from the original
 // if "editDistance" is not set, the distance between the words is random
@@ -98,16 +103,17 @@ function getPhraseVariation(phrase, index = null, editDistance = null) {
     (targetWord.length < 5 ? "sl=" : "sp=") +
     targetWord;
   axios.get(url).then((response) => {
-    var candidates = response.slice(0, 30); // get first 30 answers
+    var candidates = response.slice(0, 31); // get first 30 answers
+    candidates.shift(); // remove first result
     candidates.sort((a, b) => 0.5 - Math.random()); // shuffle them
 
-    if (!editDistance) return candidates[0];
+    if (!editDistance) return cleanString(candidates[0]);
 
     // if editDistance set, look for candidate that satisfies it
     for (let i = 0; i < candidates.length; i++) {
-      var candidateWord = candidates[i];
+      var candidateWord = candidates[i].word;
       if (computeEditDistance(candidateWord, targetWord) == editDistance) {
-        words[targetWordIdx] = candidateWord;
+        words[targetWordIdx] = cleanString(candidateWord);
         break;
       }
     }
