@@ -1,14 +1,9 @@
-const phrases = [
+export const phrases = [
   "move south",
   "move north",
   "move west",
   "move east",
-]
-
-function getTwoWordPhrases () {
-  // TODO
-}
-
-function getThreeWordPhrases () {
-  // TODO
-}
+  "get first name",
+  "get last name",
+  "",
+];
