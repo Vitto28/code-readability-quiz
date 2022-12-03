@@ -2,7 +2,12 @@ import axios from "axios";
 
 // shuffles the order of the elements inside a list/array
 export function shuffle(list) {
-  list.sort((a, b) => 0.5 - Math.random());
+  for (let i = list.length - 1; i >= 1; i--) {
+    let j = Math.floor(Math.random() * (i + 1)); // 0 <= j <= i
+    let temp = list[j];
+    list[j] = list[i];
+    list[i] = temp;
+  }
 }
 
 // --------------------------------------------------
