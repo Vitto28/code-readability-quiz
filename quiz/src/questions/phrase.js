@@ -79,18 +79,48 @@ export function stylePhrase(phrase, style) {
   }
 }
 
-// modify one of the words (if specified, the one at "index") that make up a
-// given phrase the modified word is "editDistance" changes away from the original
-// if "editDistance" is not set, the distance between the words is random
-// TODO: Fix issue where the same variation may show up multiple times
-export async function getPhraseVariation(
+// computes numOfVariations number of variations of a single phrase,
+// returning the resulting new phrases as an array
+export async function getPhraseVariations(phrase, numOfVariations) {
+  console.log("getting ALL variations for: " + phrase);
+  var newPhrases = [];
+  var numOfWords = getRandomInt(getWords(phrase).length);
+
+  while (newPhrases.length < numOfVariations) {
+    const idx = getRandomInt(numOfWords);
+    // NOTE: Currently, setting editDistance severely hinders
+    // application response time for some phrases, so for the time being,
+    // leave it as null (or dont pass it at all)
+    const editDistance = null;
+    var potentialPhrase = await computePhraseVariation(
+      phrase,
+      idx,
+      editDistance
+    );
+    if (!newPhrases.includes(potentialPhrase)) {
+      // add new phrase to list ONLY IF it is not already in it
+      newPhrases.push(potentialPhrase);
+    }
+  }
+
+  return new Promise((resolve, reject) => resolve(newPhrases));
+}
+
+// modifies the given phrase by modifying one of the words that make it up
+// the new phrase is "editDistance" (if specified) single character edits
+// from the original, otherwise, the distance is random
+// NOTE: Currently, setting editDistance severely hinders application response
+// time, so for the time being,  leave it as null when you call this function
+async function computePhraseVariation(
   phrase,
   index = null,
   editDistance = null
 ) {
+  console.log("computing variation of: " + phrase);
   var words = getWords(phrase);
   const targetWordIdx = index || getRandomInt(words.length);
   var targetWord = words[targetWordIdx];
+  console.log("variating word: " + targetWord);
 
   var params = {};
   if (targetWord.length < 5) {
@@ -113,6 +143,7 @@ export async function getPhraseVariation(
           // look for candidate that satisfies it
           for (let i = 0; i < candidates.length; i++) {
             var candidateWord = candidates[i].word;
+            console.log("candidate is: " + candidateWord);
             if (
               computeEditDistance(candidateWord, targetWord) == editDistance
             ) {

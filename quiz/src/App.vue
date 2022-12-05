@@ -4,12 +4,16 @@
       <h1>Hello World!</h1>
 
       <div class="quiz">
-        <div v-for="(question, i) in questions" :key="i" class="question">
-          <h2>{{ question.phrase }}</h2>
+        <v-card
+          v-for="(question, i) in questions"
+          :key="i"
+          class="question ma-4 px-8 py-4"
+        >
+          <v-card-title>{{ question.phrase }}</v-card-title>
           <ul>
             <li v-for="(op, i) in question.options" :key="i">{{ op }}</li>
           </ul>
-        </div>
+        </v-card>
       </div>
     </v-main>
   </v-app>
@@ -22,10 +26,10 @@ export default {
   name: "App",
 
   async mounted() {
-    var q = await createQuizQuestions(phrases, 4);
+    var q = await createQuizQuestions(phrases, 8);
     setTimeout(() => {
       this.questions = q;
-    }, 500);
+    }, 0);
     console.log(q);
   },
 
@@ -42,5 +46,10 @@ export default {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+.quiz {
+  display: flex;
+  flex-wrap: wrap;
 }
 </style>

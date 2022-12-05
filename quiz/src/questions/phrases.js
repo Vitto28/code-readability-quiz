@@ -8,8 +8,8 @@ export const phrases = [
   "phone number",
   "first name",
   "last name",
-  "count words",
   "rewrite file",
+  "count words",
   // three word
   "date of birth",
   "number of items",

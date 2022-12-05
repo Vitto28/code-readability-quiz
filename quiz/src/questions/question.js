@@ -1,7 +1,7 @@
 import {
   stylePhrase,
   getRandomSetOfPhrases,
-  getPhraseVariation,
+  getPhraseVariations,
   shuffle,
 } from "./phrase";
 
@@ -20,9 +20,9 @@ async function createQuestion(phrase, style, numOfAnswers = 4) {
 
   // create numOfAnswers - 1 wrong answers
   numOfAnswers--;
+  const variations = await getPhraseVariations(phrase, numOfAnswers);
   for (let i = 0; i < numOfAnswers; i++) {
-    var variation = await getPhraseVariation(phrase, null, 1);
-    question.options.push(stylePhrase(variation, style));
+    question.options.push(stylePhrase(variations[i], style));
   }
   shuffle(question.options); // shuffle answers
 
