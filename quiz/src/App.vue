@@ -1,9 +1,11 @@
 <template>
   <v-app>
     <v-main>
-      <h1>Hello World!</h1>
+      <UserForm />
 
-      <div class="quiz">
+      <!-- Quiz -->
+      <v-btn @click="showQuestions = !showQuestions">Show Questions</v-btn>
+      <div v-show="showQuestions" class="quiz">
         <v-card
           v-for="(question, i) in questions"
           :key="i"
@@ -15,6 +17,7 @@
           </ul>
         </v-card>
       </div>
+      <!-- End Quiz -->
     </v-main>
   </v-app>
 </template>
@@ -22,8 +25,13 @@
 <script>
 import { phrases } from "@/questions/phrases.js";
 import { createQuizQuestions } from "@/questions/question.js";
+import UserForm from "@/components/UserForm.vue";
 export default {
   name: "App",
+
+  components: {
+    UserForm,
+  },
 
   async mounted() {
     var q = await createQuizQuestions(phrases, 8);
@@ -35,6 +43,7 @@ export default {
 
   data() {
     return {
+      showQuestions: false,
       questions: [],
     };
   },
