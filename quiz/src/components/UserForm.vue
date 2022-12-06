@@ -109,8 +109,11 @@
         <v-btn size="x-large" class="mr-16 bg-green-lighten-1" @click="submit">
           Finish
         </v-btn>
-        <v-btn size="x-large" class="bg-red-lighten-2" @click="reset">
+        <v-btn size="x-large" class="mr-16 bg-red-lighten-2" @click="reset">
           Reset
+        </v-btn>
+        <v-btn size="x-large" class="mr-16 bg-grey-lighten-2" @click="goToTest"
+          >skip
         </v-btn>
       </div>
     </v-form>

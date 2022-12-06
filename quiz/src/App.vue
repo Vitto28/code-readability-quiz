@@ -9,7 +9,7 @@
         <UserForm @state="setState" v-if="currentState === 'form'" />
 
         <!-- Test -->
-        <h1 v-if="currentState === 'test'">Test</h1>
+        <Test v-if="currentState === 'test'" />
 
         <!-- End -->
 
@@ -38,12 +38,14 @@ import { phrases } from "@/questions/phrases.js";
 import { createQuizQuestions } from "@/questions/question.js";
 import UserForm from "@/components/UserForm.vue";
 import Home from "@/components/Home.vue";
+import Test from "@/components/Test.vue";
 export default {
   name: "App",
 
   components: {
     UserForm,
     Home,
+    Test,
   },
 
   async mounted() {
