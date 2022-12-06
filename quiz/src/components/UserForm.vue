@@ -1,8 +1,8 @@
 <template>
   <div id="form-container" class="w-100 h-100">
     <v-form id="form" class="my-16" lazy-validation>
-      <div class="mb-8">
-        <h1 class="text-h2">About You</h1>
+      <div id="title" class="mb-8">
+        <h1 class="text-h2 mb-2">About You</h1>
         <span class="text-body-1">
           Before you begin the test, we need to know some basic information
           about you. <br />
@@ -69,7 +69,7 @@
               :label="lang"
             ></v-checkbox>
           </v-container>
-          <span class="text-body-1"
+          <span class="text-body-2"
             ><b class="text-subtitle-1 font-weight-bold">Other languages</b>
             (separate them by a comma)</span
           >
@@ -83,7 +83,7 @@
         <h3 class="mb-2 text-h6">
           Which of these two casing styles do you prefer?
         </h3>
-        <div id="style-preference">
+        <div id="style-preference" class="mb-16">
           <v-slider
             color="green-lighten-2"
             class="mb-8"
@@ -97,9 +97,13 @@
         </div>
       </div>
 
-      <div id="buttons">
-        <v-btn class="mr-4 bg-green-lighten-1" @click="submit"> Finish </v-btn>
-        <v-btn class="mr-4 bg-red-lighten-2" @click="reset"> Reset </v-btn>
+      <div id="buttons" class="mb-16 mt-8">
+        <v-btn size="x-large" class="mr-16 bg-green-lighten-1" @click="submit">
+          Finish
+        </v-btn>
+        <v-btn size="x-large" class="bg-red-lighten-2" @click="reset">
+          Reset
+        </v-btn>
       </div>
     </v-form>
   </div>
@@ -209,6 +213,7 @@ export default {
 
 #style-preference .v-slider-track__tick-label {
   margin-top: 16px;
+  color: #444;
 }
 </style>
 
@@ -217,6 +222,14 @@ export default {
   display: flex;
   justify-content: center;
   align-items: flex-start;
+  color: black !important;
+}
+
+#title,
+.text-body-1,
+.text-subtitle-1,
+.text-h6 {
+  color: #444;
 }
 
 .text-body-1 {
