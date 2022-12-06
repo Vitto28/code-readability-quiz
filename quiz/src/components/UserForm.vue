@@ -1,6 +1,14 @@
 <template>
   <div id="form-container" class="w-100 h-100">
     <v-form id="form" class="my-16" lazy-validation>
+      <v-btn
+        id="back-btn"
+        @click="goToHome"
+        variant="text"
+        prepend-icon="mdi-chevron-left"
+      >
+        go back
+      </v-btn>
       <div id="title" class="mb-8">
         <h1 class="text-h2 mb-2">About You</h1>
         <span class="text-body-1">
@@ -150,13 +158,23 @@ export default {
   }),
 
   methods: {
+    goToHome() {
+      this.$emit("state", "home");
+    },
+
+    goToTest() {
+      this.$emit("state", "test");
+    },
+
     submit() {
       if (this.formIsValid) {
         this.$emit("userData", this.userData);
+        this.goToTest();
       } else {
         alert("The form is incomplete.");
       }
     },
+
     reset() {
       this.age = null;
       this.gender = null;
@@ -218,6 +236,16 @@ export default {
 </style>
 
 <style scoped>
+#form {
+  position: relative;
+}
+
+#back-btn {
+  position: absolute;
+  left: -36px;
+  top: -48px;
+}
+
 #form-container {
   display: flex;
   justify-content: center;
