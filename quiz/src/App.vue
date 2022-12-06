@@ -4,7 +4,7 @@
       <UserForm />
 
       <!-- Quiz -->
-      <v-btn @click="showQuestions = !showQuestions">Show Questions</v-btn>
+      <!-- <v-btn @click="showQuestions = !showQuestions">Show Questions</v-btn> -->
       <div v-show="showQuestions" class="quiz">
         <v-card
           v-for="(question, i) in questions"
