@@ -42,16 +42,22 @@
           tick-size="4"
         ></v-slider>
 
-        <h4>What languages do you code in?</h4>
+        <h3>What languages do you code in?</h3>
         <v-container id="languages" fluid>
           <v-checkbox
             v-for="(lang, i) in languages"
             :key="i"
-            v-model="usedLanguages"
+            v-model="selectedLanguages"
             :value="lang"
             :label="lang"
           ></v-checkbox>
         </v-container>
+        <span><b>Other languages</b> (separate them by a comma)</span>
+        <v-text-field
+          placeholder="Add any other programming languages you know here..."
+          v-model="extraLanguages"
+          clearable
+        ></v-text-field>
       </div>
 
       <div id="buttons">
@@ -104,7 +110,8 @@ export default {
       "HTML/CSS",
       "C#",
     ],
-    usedLanguages: [],
+    selectedLanguages: [],
+    extraLanguages: "",
   }),
 
   methods: {
@@ -115,6 +122,20 @@ export default {
     },
     reset() {
       this.$refs.form.reset();
+    },
+  },
+
+  computed: {
+    usedLanguages() {
+      var languages = [...this.selectedLanguages];
+      var extra = this.extraLanguages.split(",");
+      for (let i = 0; i < extra.length; i++) {
+        var lang = extra[i].trim();
+        if (lang !== "") {
+          languages.push(lang);
+        }
+      }
+      return languages;
     },
   },
 };
