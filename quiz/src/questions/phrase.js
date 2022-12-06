@@ -82,7 +82,6 @@ export function stylePhrase(phrase, style) {
 // computes numOfVariations number of variations of a single phrase,
 // returning the resulting new phrases as an array
 export async function getPhraseVariations(phrase, numOfVariations) {
-  console.log("getting ALL variations for: " + phrase);
   var newPhrases = [];
   var numOfWords = getRandomInt(getWords(phrase).length);
 
@@ -116,11 +115,9 @@ async function computePhraseVariation(
   index = null,
   editDistance = null
 ) {
-  console.log("computing variation of: " + phrase);
   var words = getWords(phrase);
   const targetWordIdx = index || getRandomInt(words.length);
   var targetWord = words[targetWordIdx];
-  console.log("variating word: " + targetWord);
 
   var params = {};
   if (targetWord.length < 5) {
@@ -143,7 +140,6 @@ async function computePhraseVariation(
           // look for candidate that satisfies it
           for (let i = 0; i < candidates.length; i++) {
             var candidateWord = candidates[i].word;
-            console.log("candidate is: " + candidateWord);
             if (
               computeEditDistance(candidateWord, targetWord) == editDistance
             ) {
