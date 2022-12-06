@@ -1,43 +1,25 @@
 <template>
   <div id="form-container" class="w-100 h-100">
-    <!-- <div style="z-index: 100; width: 500px; left: 8px">
-      <div v-for="(entry, i) in Object.entries(this.userData)" :key="i">
-        {{ entry[0] }}: {{ entry[1] }}
+    <v-form id="form" class="my-16" lazy-validation>
+      <div class="mb-8">
+        <h1 class="text-h2">About You</h1>
+        <span class="text-body-1">
+          Before you begin the test, we need to know some basic information
+          about you. <br />
+          Don't worry, we're not selling your personal data to anybody
+          <span class="text-grey-lighten-4">the authorities are aware of</span>
+        </span>
       </div>
-    </div> -->
-    <v-form id="form" class="mt-16" lazy-validation>
-      <!-- <v-text-field
-        v-model="name"
-        :counter="10"
-        :rules="nameRules"
-        label="Name"
-        required
-      ></v-text-field>
 
-      <v-text-field
-        v-model="email"
-        :rules="emailRules"
-        label="E-mail"
-        required
-      ></v-text-field>
-
-      <v-select
-        v-model="select"
-        :items="items"
-        :rules="[(v) => !!v || 'Item is required']"
-        label="Item"
-        required
-      ></v-select> -->
-
-      <h3>Gender</h3>
+      <h3 class="text-h6">Gender</h3>
       <v-radio-group v-model="gender" mandatory inline>
         <v-radio label="Male" value="male"></v-radio>
         <v-radio label="Female" value="female"></v-radio>
         <v-radio label="Other" value="other"></v-radio>
       </v-radio-group>
 
-      <h3>Age</h3>
-      <div id="age">
+      <h3 class="text-h6">Age</h3>
+      <div class="horizontal">
         <v-radio-group v-model="age" mandatory>
           <v-radio label="< 20" value="<20"></v-radio>
           <v-radio label="20 - 29" value="20s"></v-radio>
@@ -52,22 +34,32 @@
         v-model="isProgrammer"
         label="Do you know how to code?"
         required
+        color="green lighten-1"
       ></v-checkbox>
 
       <div id="programmer" v-show="isProgrammer">
-        <h3>Which of these two casing styles do you prefer?</h3>
-        <v-slider
-          class="mb-8"
-          :model-value="preferredStyle"
-          :ticks="styles"
-          :max="2"
-          step="1"
-          show-ticks="always"
-          tick-size="4"
-        ></v-slider>
+        <h3 class="text-h6">How long have you been programming for?</h3>
+        <div class="horizontal">
+          <v-radio-group v-model="yearProgramming" mandatory>
+            <v-radio label="less than 1 year" value="<1"></v-radio>
+            <v-radio label="1 - 5 years" value="1-5"></v-radio>
+            <v-radio label="5 - 10 years" value="5-10"></v-radio>
+            <v-radio label="10+ years" value=">10"></v-radio>
+          </v-radio-group>
+        </div>
+
+        <h3 class="text-h6">How much do you program per day?</h3>
+        <div class="horizontal">
+          <v-radio-group v-model="hoursProgramming" mandatory>
+            <v-radio label="less than 1 hour" value="<1"></v-radio>
+            <v-radio label="1 - 4 hours" value="1-4"></v-radio>
+            <v-radio label="4 - 8 hours" value="4-8"></v-radio>
+            <v-radio label="8+ hours" value=">8"></v-radio>
+          </v-radio-group>
+        </div>
 
         <div class="mb-4">
-          <h3>What languages do you code in?</h3>
+          <h3 class="text-h6">What languages do you code in?</h3>
           <v-container id="languages" fluid>
             <v-checkbox
               v-for="(lang, i) in languages"
@@ -77,18 +69,37 @@
               :label="lang"
             ></v-checkbox>
           </v-container>
-          <span><b>Other languages</b> (separate them by a comma)</span>
+          <span class="text-body-1"
+            ><b class="text-subtitle-1 font-weight-bold">Other languages</b>
+            (separate them by a comma)</span
+          >
           <v-text-field
-            placeholder="Add any other programming languages you know here..."
+            placeholder="e.g: language-1, language-2, ..."
             v-model="extraLanguages"
             clearable
           ></v-text-field>
         </div>
+
+        <h3 class="mb-2 text-h6">
+          Which of these two casing styles do you prefer?
+        </h3>
+        <div id="style-preference">
+          <v-slider
+            color="green-lighten-2"
+            class="mb-8"
+            v-model="preferredStyle"
+            :ticks="styles"
+            :max="2"
+            step="1"
+            show-ticks="always"
+            tick-size="4"
+          ></v-slider>
+        </div>
       </div>
 
       <div id="buttons">
-        <v-btn color="success" class="mr-4" @click="submit"> Finish </v-btn>
-        <v-btn color="error" class="mr-4" @click="reset"> Reset </v-btn>
+        <v-btn class="mr-4 bg-green-lighten-1" @click="submit"> Finish </v-btn>
+        <v-btn class="mr-4 bg-red-lighten-2" @click="reset"> Reset </v-btn>
       </div>
     </v-form>
   </div>
@@ -107,7 +118,8 @@ export default {
 
     isProgrammer: false,
 
-    codingYears: null,
+    yearProgramming: null,
+    hoursProgramming: null,
 
     preferredStyle: 1,
     styles: {
@@ -131,15 +143,12 @@ export default {
     ],
     selectedLanguages: [],
     extraLanguages: "",
-
-    codingYears: null,
   }),
 
   methods: {
     submit() {
       if (this.formIsValid) {
         this.$emit("userData", this.userData);
-        alert(JSON.stringify(this.userData));
       } else {
         alert("The form is incomplete.");
       }
@@ -147,10 +156,11 @@ export default {
     reset() {
       this.age = null;
       this.gender = null;
-      this.isProgrammer = false;
+      this.preferredStyle = 1;
       this.selectedLanguages = [];
-      this.extra = "";
-      this.codingYears = null;
+      this.extraLanguages = "";
+      this.yearProgramming = null;
+      this.hoursProgramming = null;
     },
   },
 
@@ -171,28 +181,34 @@ export default {
       var generalIncomplete = !this.age || !this.gender;
       var programmerIncomplete =
         this.isProgrammer &&
-        (!this.codingYears || this.usedLanguages.length == 0);
-      return !generalIncomplete & !programmerIncomplete;
+        (this.usedLanguages.length == 0 ||
+          !this.yearProgramming ||
+          !this.hoursProgramming);
+      return !generalIncomplete && !programmerIncomplete;
     },
 
     userData() {
-      return {
-        age: this.age,
-        gender: this.gender,
-        isProgrammer: this.isProgrammer,
-        languages: this.usedLanguages,
-        preferredStyle: this.styles[this.preferredStyle],
-        codingYears: this.codingYears,
-      };
+      var data = { age: this.age, gender: this.gender };
+      if (this.isProgrammer) {
+        data.languages = this.usedLanguages;
+        data.preferredStyle = this.styles[this.preferredStyle];
+        data.yearProgramming = this.yearProgramming;
+        data.hoursProgramming = this.hoursProgramming;
+      }
+      return data;
     },
   },
 };
 </script>
 
 <style>
-#age .v-selection-control-group {
+.horizontal .v-selection-control-group {
   flex-direction: row;
   justify-content: space-between !important;
+}
+
+#style-preference .v-slider-track__tick-label {
+  margin-top: 16px;
 }
 </style>
 
@@ -201,6 +217,10 @@ export default {
   display: flex;
   justify-content: center;
   align-items: flex-start;
+}
+
+.text-body-1 {
+  font-size: 18px !important;
 }
 
 #form {
