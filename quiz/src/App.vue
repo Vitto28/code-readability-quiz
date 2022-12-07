@@ -53,11 +53,13 @@
             </v-card>
           </div>
           <h2 class="text-h4 mt-4">What now?</h2>
-          <p class="mb-2 px-16">
+          <p class="mb-2">
             Before we let you go, there's one last step you need to do. We have
             gathered all the data you provided during this test into a single
-            CSV file. Please download it and send it via email
-            <b>to all three</b> of the following people:
+            CSV file.
+            <b>If this is your first time completing the test</b>, please
+            download it and send it via email <b>to all three</b> of the people
+            listed below:
           </p>
           <div
             class="mb-8"
