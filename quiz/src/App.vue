@@ -37,7 +37,7 @@ export default {
     setTimeout(() => {
       this.questions = q;
     }, 0);
-    console.log(q);
+    console.log("Fetched questions");
   },
 
   data() {

@@ -1,5 +1,7 @@
+<!-- https://codesandbox.io/s/vue-stopwatch-forked-fe06fo?file=/src/App.vue:399-514 -->
+
 <template>
-  <div ref="container" id="test-container">
+  <div id="test-container">
     <!-- Test Screen -->
     <div v-show="this.state === 'test'" id="test" class="mt-16 pa-8">
       <!-- Show Phrase -->
@@ -9,7 +11,7 @@
           <h1>{{ currentQuestion.phrase }}</h1>
         </div>
 
-        <v-btn size="x-large" class="bg-green-lighten-1" @click="closePreview">
+        <v-btn @click="closePreview" size="x-large" class="bg-green-lighten-1">
           Got it
         </v-btn>
       </div>
@@ -27,10 +29,13 @@
             <p class="mb-2 mr-2">your phrase is</p>
             <h1>{{ currentQuestion.phrase }}</h1>
           </div>
-          <StopWatch ref="stopWatch" />
+          <StopWatch :running="running" :resetWhenStart="true" />
+          <button @click="startT">start</button>
+          <button @click="stopT">stop</button>
         </div>
-        <div id="options">
+        <div id="options" class="mt-4">
           <v-card
+            variant="tonal"
             class="option"
             v-for="(option, index) in currentQuestion.options"
             :key="index"
@@ -48,7 +53,7 @@
         <v-btn
           id="next-btn"
           size="x-large"
-          class="bg-green-lighten-1 mt-16"
+          class="bg-green-lighten-3 mt-16"
           :disabled="currentQuestion.selected === null"
           @click="getNextQuestion"
         >
@@ -151,7 +156,7 @@ export default {
 
   data() {
     return {
-      timer: this.$refs.stopWatch,
+      running: false, // whether the timer is running or not
       activeQuestions: [], // questions currently being used
       currentQuestionIdx: 0,
       state: "instructions",
@@ -186,33 +191,30 @@ export default {
     };
   },
 
-  mounted() {
-    const interval = setInterval(() => {
-      if (this.$refs.stopWatch) {
-        this.timer = this.$refs.stopWatch;
-      }
-    }, 50);
-  },
-
   methods: {
+    // timer functions
+    stopT() {
+      this.running = false;
+    },
+    startT() {
+      this.running = true;
+    },
+
     // quiz methods
     setAnswer(idx) {
-      this.timer.stop();
+      this.running.false;
       this.currentQuestion.selected = idx;
     },
 
     getNextQuestion() {
       this.currentQuestionIdx++;
-      this.timer.reset();
       this.showPhrase = true;
     },
 
     closePreview() {
       this.showPhrase = false;
-      this.timer.start();
+      this.running = true;
     },
-
-    // starting and ending quiz
 
     beginTutorial() {
       this.activeQuestions = this.sampleQuestions;
@@ -331,7 +333,6 @@ li {
 
 #options {
   display: grid;
-  background-color: bisque;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
   gap: 3rem;
@@ -352,7 +353,7 @@ li {
 
 .option.disabled {
   pointer-events: none;
-  opacity: 0.75;
+  opacity: 0.5;
 }
 
 .option:hover {
@@ -361,7 +362,6 @@ li {
 }
 
 #test {
-  background-color: azure;
   width: 1300px;
   height: 700px;
   display: flex;

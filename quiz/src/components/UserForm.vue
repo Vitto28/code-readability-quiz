@@ -93,7 +93,7 @@
         </h3>
         <div id="style-preference" class="mb-16">
           <v-slider
-            color="green-lighten-2"
+            color="green-lighten-3"
             class="mb-8"
             v-model="preferredStyle"
             :ticks="styles"
@@ -106,7 +106,7 @@
       </div>
 
       <div id="buttons" class="mb-16 mt-8">
-        <v-btn size="x-large" class="mr-16 bg-green-lighten-1" @click="submit">
+        <v-btn size="x-large" class="mr-16 bg-green-lighten-2 text-white" @click="submit">
           Finish
         </v-btn>
         <v-btn size="x-large" class="mr-16 bg-red-lighten-2" @click="reset">
