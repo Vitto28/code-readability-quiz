@@ -13,6 +13,13 @@ export const phrases = [
   "set timer",
   "download images",
   "translate word",
+  "remove image",
+  "compare values",
+  "verify account",
+  "reset password",
+  "enter email",
+  "longest sentence",
+  "smallest value",
 
   // three word
   "date of birth",
@@ -28,4 +35,11 @@ export const phrases = [
   "find last element",
   "update profile picture",
   "restore deleted documents",
+  "download latest update",
+  "generate unique password",
+  "open random folder",
+  "last known address",
+  "largest available container",
+  "fastest route possible",
+  "set new username",
 ];
