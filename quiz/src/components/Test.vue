@@ -3,7 +3,11 @@
 <template>
   <div id="test-container">
     <!-- Test Screen -->
-    <div v-show="this.state === 'test'" id="test" class="mt-16 pa-8">
+    <div
+      v-show="this.state === 'test' || this.state === 'tutorial'"
+      id="test"
+      class="mt-16 pa-8"
+    >
       <!-- Show Phrase -->
       <div class="w-100 h-100" id="big-phrase" v-if="showPhrase">
         <div class="phrase">
@@ -33,7 +37,11 @@
             <p class="mb-2 mr-2">your phrase is</p>
             <h1>{{ currentQuestion.phrase }}</h1>
           </div>
-          <StopWatch :running="running" :resetWhenStart="true" />
+          <StopWatch
+            ref="stopWatch"
+            :running="running"
+            :resetWhenStart="true"
+          />
         </div>
         <div id="options" class="mt-4">
           <v-card
@@ -140,6 +148,42 @@
       </div>
     </div>
     <!-- End Instructions -->
+
+    <!-- Tutorial End Screen -->
+    <div
+      id="tutorial-end"
+      v-if="this.state === 'tutorial-end'"
+      class="mx-16 my-8 px-16"
+    >
+      <h1 class="text-h2 mb-2">Tutorial Finished</h1>
+      <p class="text-body-1 my-8">
+        Whew! That wasn't too bad, was it? <br /><br />
+        Now you know how this test works and how you're meant to interact with
+        it. <br />
+        You are free (and encouraged!) to redo the tutorial again until you
+        become comfortable with the steps you need to perform.
+      </p>
+      <p class="text-body-1 mb-8">
+        Otherwise, if you feel ready, you may continue to the real test now.
+        Good luck!
+      </p>
+      <div id="buttons" class="mt-16">
+        <v-btn size="x-large" class="mr-16" @click="redoTutorial">
+          Redo Tutorial
+        </v-btn>
+        <v-btn
+          size="x-large"
+          class="ml-16 bg-green-lighten-2 text-white"
+          @click="beginTest"
+        >
+          Do real test
+        </v-btn>
+      </div>
+    </div>
+    <!-- Tutorial End Screen -->
+
+    <!-- Final end screen -->
+    <!-- End Final end screen -->
   </div>
 </template>
 
@@ -168,8 +212,7 @@ export default {
 
       sampleQuestions: [
         {
-          // phrase: "a sample phrase",
-          phrase: "restore deleted documents",
+          phrase: "a sample phrase",
           options: [
             "a-sample-phase",
             "a-simple-phrase",
@@ -201,13 +244,21 @@ export default {
     setAnswer(idx) {
       this.running = false;
       this.currentQuestion.selected = idx;
+      this.currentQuestion.time = this.$refs.stopWatch.shownTime;
     },
 
     getNextQuestion() {
       this.currentQuestionIdx++;
-      this.showPhrase = true;
+      if (this.currentQuestionIdx === this.activeQuestions.length) {
+        if (this.state === "tutorial") {
+          this.state = "tutorial-end";
+        } else if (this.state === "test") {
+          this.$emit("test-finished", this.activeQuestions);
+        }
+      } else {
+        this.showPhrase = true;
+      }
     },
-
     closePreview() {
       this.showPhrase = false;
       this.running = true;
@@ -215,31 +266,32 @@ export default {
 
     beginTutorial() {
       this.activeQuestions = this.sampleQuestions;
+      this.currentQuestionIdx = 0;
+      this.state = "tutorial";
       this.showPhrase = true;
-      this.state = "test";
     },
 
     redoTutorial() {
-      this.cleanSampleQuestions();
-      this.beginTutorial();
-    },
-
-    cleanSampleQuestions() {
+      // clean sample questions
       var questions = this.sampleQuestions;
       for (let i = 0; i < questions.length; i++) {
         var q = questions[i];
         q.selected = null;
         q.time = 0;
-      }
-    },
 
-    seeInstructionsAgain() {
-      this.cleanSampleQuestions();
+        // reorder answers
+        const correctAnswer = q.options[q.solution];
+        q.options.push(q.options.shift());
+        q.solution = q.options.findIndex((e) => e === correctAnswer);
+      }
       this.state = "instructions";
     },
 
     beginTest() {
-      // TODO
+      this.activeQuestions = this.questions;
+      this.currentQuestionIdx = 0;
+      this.state = "test";
+      this.showPhrase = true;
     },
   },
 
@@ -280,6 +332,16 @@ li {
 
 li {
   margin-bottom: 24px;
+}
+
+#tutorial-end {
+  margin-top: 200px !important;
+}
+
+#buttons {
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
 
 #bottom {

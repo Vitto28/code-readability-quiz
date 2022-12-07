@@ -1,14 +1,6 @@
 <template>
   <div id="form-container" class="w-100 h-100">
     <v-form id="form" class="my-16" lazy-validation>
-      <v-btn
-        id="back-btn"
-        @click="goToHome"
-        variant="text"
-        prepend-icon="mdi-chevron-left"
-      >
-        go back
-      </v-btn>
       <div id="title" class="mb-8">
         <h1 class="text-h2 mb-2">About You</h1>
         <span class="text-body-1">
@@ -106,7 +98,11 @@
       </div>
 
       <div id="buttons" class="mb-16 mt-8">
-        <v-btn size="x-large" class="mr-16 bg-green-lighten-2 text-white" @click="submit">
+        <v-btn
+          size="x-large"
+          class="mr-16 bg-green-lighten-2 text-white"
+          @click="submit"
+        >
           Finish
         </v-btn>
         <v-btn size="x-large" class="mr-16 bg-red-lighten-2" @click="reset">
