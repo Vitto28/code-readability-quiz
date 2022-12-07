@@ -84,8 +84,8 @@
       v-if="this.state === 'instructions'"
       class="my-8 px-16"
     >
-      <h1 class="text-h2 mb-2">Tutorial</h1>
-      <p class="text-body-1 mb-8">
+      <h1 class="text-h2 mb-2">(Unskippable) Tutorial</h1>
+      <p class="text-body-1 mb-8 mt-4">
         Let's do a quick run down of how the test works and how you're meant to
         complete it. You will need to repeat the following steps a certain
         amount of times:
@@ -180,10 +180,7 @@
         </v-btn>
       </div>
     </div>
-    <!-- Tutorial End Screen -->
-
-    <!-- Final end screen -->
-    <!-- End Final end screen -->
+    <!-- End Tutorial End Screen -->
   </div>
 </template>
 
@@ -253,7 +250,7 @@ export default {
         if (this.state === "tutorial") {
           this.state = "tutorial-end";
         } else if (this.state === "test") {
-          this.$emit("test-finished", this.activeQuestions);
+          this.$emit("state", "end", this.activeQuestions);
         }
       } else {
         this.showPhrase = true;

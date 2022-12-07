@@ -9,9 +9,83 @@
         <UserForm @state="setState" v-if="currentState === 'form'" />
 
         <!-- Test -->
-        <Test :questions="questions" v-if="currentState === 'test'" />
+        <Test
+          @state="setState"
+          :questions="questions"
+          v-if="currentState === 'test'"
+        />
 
         <!-- End -->
+        <div v-if="currentState === 'end'" id="end-screen">
+          <h1 class="text-h1 mb-8">Test Finished</h1>
+          <p class="mb-4">
+            Congratulations, you have finished the test! As a reward, here are
+            some stats for you:
+          </p>
+          <div id="stats" class="mb-8">
+            <v-card
+              variant="tonal"
+              min-height="120"
+              subtitle="Correct Answers"
+              class="stat mx-4"
+            >
+              <template v-slot:text
+                ><h1 class="mt-4">{{ correctAnswers }}</h1>
+              </template>
+            </v-card>
+            <v-card
+              variant="tonal"
+              subtitle="Average Click Speed"
+              class="stat mx-4"
+            >
+              <template v-slot:text
+                ><h1 class="mt-4">{{ averageClickSpeed }}</h1>
+              </template>
+            </v-card>
+            <v-card
+              variant="tonal"
+              subtitle="Fastest Correct Guess"
+              class="stat mx-4"
+            >
+              <template v-slot:text
+                ><h1 class="mt-4">{{ fastestCorrectGuess }}</h1>
+              </template>
+            </v-card>
+          </div>
+          <h2 class="text-h4 mt-8">What now?</h2>
+          <p class="mb-2 px-16">
+            Before we let you go, there's one last step you need to do. We have
+            gathered all the data you provided during this test into a single
+            CSV file. Please download it and send it via email
+            <b>to all three</b> of the following people:
+          </p>
+          <div
+            class="mb-8"
+            style="display: flex; width: 100%; justify-content: center"
+          >
+            <div class="mx-6" v-for="(person, i) in creators" :key="i">
+              <h4 class="text-h6 mt-2">{{ person.name }}</h4>
+              <span class="text-body-1">{{ person.email }}</span>
+            </div>
+          </div>
+
+          <JsonCSV name="not-a-virus.csv" :data="data">
+            <v-btn
+              class="mb-8"
+              color="green-lighten-2 px-4 text-white"
+              size="x-large"
+              >Download data</v-btn
+            >
+          </JsonCSV>
+
+          <p class="ma-0 mb-2 mt-12">oh, and one final thing...</p>
+          <div id="thanks">
+            <p class="ma-0">
+              <b class="text-green-lighten-2">thank you</b> for participating!
+            </p>
+          </div>
+        </div>
+        <!-- End end-screen -->
       </div>
     </v-main>
   </v-app>
@@ -23,6 +97,8 @@ import { createQuizQuestions } from "@/questions/question.js";
 import UserForm from "@/components/UserForm.vue";
 import Home from "@/components/Home.vue";
 import Test from "@/components/Test.vue";
+import JsonCSV from "vue-json-csv";
+
 export default {
   name: "App",
 
@@ -30,6 +106,7 @@ export default {
     UserForm,
     Home,
     Test,
+    JsonCSV,
   },
 
   async mounted() {
@@ -42,16 +119,51 @@ export default {
 
   data() {
     return {
-      currentState: "home",
+      creators: [
+        { name: "João Tomazoni", email: "joao.tomazoni@usi.ch" },
+        { name: "Vittoria Marina Scocco", email: "vittoria.scocco@usi.ch" },
+        { name: "Agostino Monti", email: "agostino.monti@usi.ch" },
+      ],
 
-      showQuestions: false,
+      // currentState: "home",
+      currentState: "end",
       questions: [],
+      userData: {},
+      testResults: {},
+      data: [], // final JSON obj to be transformed to CSV file
     };
   },
 
+  computed: {
+    correctAnswers() {
+      return "2/8";
+    },
+
+    averageClickSpeed() {
+      return "2.05s";
+    },
+
+    fastestCorrectGuess() {
+      return "0.28s";
+    },
+  },
+
   methods: {
-    setState(state) {
+    setState(state, payload) {
       this.currentState = state;
+      if (state === "end") {
+        // emitted by test
+        this.testResults = payload;
+        this.createJSON();
+      } else if (state === "test") {
+        // emitted by form
+        this.userData = payload;
+      }
+    },
+
+    createJSON() {
+      this.userData.answers = JSON.stringify(this.testResults);
+      this.data.push(this.userData);
     },
   },
 };
@@ -79,5 +191,57 @@ p {
 .quiz {
   display: flex;
   flex-wrap: wrap;
+}
+
+/* End screen */
+
+#end-screen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: 1500px;
+  height: 100%;
+}
+
+#end-screen p {
+  margin: 8px 188px;
+  text-align: center;
+}
+
+#credits {
+  display: flex;
+  width: 100%;
+  justify-content: space-evenly;
+}
+
+#credits h2 {
+  font-size: 1.1rem !important;
+}
+
+.credit-area {
+  width: 350px;
+}
+
+.credit-area h4 {
+  font-size: 1rem !important;
+}
+
+#stats {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+#stats .stat {
+  width: 250px;
+}
+
+#stats .stat h1 {
+  font-size: 5rem;
+}
+
+#thanks > * {
+  font-size: 2rem;
 }
 </style>
