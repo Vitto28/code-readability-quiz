@@ -40,7 +40,7 @@
       <div id="programmer" v-show="isProgrammer">
         <h3 class="text-h6">How long have you been programming for?</h3>
         <div class="horizontal">
-          <v-radio-group v-model="yearProgramming" mandatory>
+          <v-radio-group v-model="yearsProgramming" mandatory>
             <v-radio label="less than 1 year" value="<1"></v-radio>
             <v-radio label="1 - 5 years" value="1-5"></v-radio>
             <v-radio label="5 - 10 years" value="5-10"></v-radio>
@@ -126,7 +126,7 @@ export default {
 
     isProgrammer: false,
 
-    yearProgramming: null,
+    yearsProgramming: null,
     hoursProgramming: null,
 
     preferredStyle: 1,
@@ -177,7 +177,7 @@ export default {
       this.preferredStyle = 1;
       this.selectedLanguages = [];
       this.extraLanguages = "";
-      this.yearProgramming = null;
+      this.yearsProgramming = null;
       this.hoursProgramming = null;
     },
   },
@@ -200,7 +200,7 @@ export default {
       var programmerIncomplete =
         this.isProgrammer &&
         (this.usedLanguages.length == 0 ||
-          !this.yearProgramming ||
+          !this.yearsProgramming ||
           !this.hoursProgramming);
       return !generalIncomplete && !programmerIncomplete;
     },
@@ -210,7 +210,7 @@ export default {
       if (this.isProgrammer) {
         data.languages = this.usedLanguages;
         data.preferredStyle = this.styles[this.preferredStyle];
-        data.yearProgramming = this.yearProgramming;
+        data.yearsProgramming = this.yearsProgramming;
         data.hoursProgramming = this.hoursProgramming;
       }
       return data;

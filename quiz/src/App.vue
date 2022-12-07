@@ -16,7 +16,7 @@
         />
 
         <!-- End -->
-        <div v-if="currentState === 'end'" id="end-screen">
+        <div v-cloak v-if="currentState === 'end'" id="end-screen">
           <h1 class="text-h1 mb-8">Test Finished</h1>
           <p class="mb-4">
             Congratulations, you have finished the test! As a reward, here are
@@ -52,7 +52,7 @@
               </template>
             </v-card>
           </div>
-          <h2 class="text-h4 mt-8">What now?</h2>
+          <h2 class="text-h4 mt-4">What now?</h2>
           <p class="mb-2 px-16">
             Before we let you go, there's one last step you need to do. We have
             gathered all the data you provided during this test into a single
@@ -78,7 +78,7 @@
             >
           </JsonCSV>
 
-          <p class="ma-0 mb-2 mt-12">oh, and one final thing...</p>
+          <p class="ma-0 mb-2 mt-8">oh, and one final thing...</p>
           <div id="thanks">
             <p class="ma-0">
               <b class="text-green-lighten-2">thank you</b> for participating!
@@ -125,8 +125,7 @@ export default {
         { name: "Agostino Monti", email: "agostino.monti@usi.ch" },
       ],
 
-      // currentState: "home",
-      currentState: "end",
+      currentState: "home",
       questions: [],
       userData: {},
       testResults: {},
@@ -136,15 +135,51 @@ export default {
 
   computed: {
     correctAnswers() {
-      return "2/8";
+      var numOfQuestions = this.questions.length;
+      var correctAnswers = 0;
+      for (let i = 0; i < numOfQuestions; i++) {
+        var question = this.testResults[i] || {};
+        if (question.selected === question.solution) correctAnswers++;
+      }
+      return `${correctAnswers}/${numOfQuestions}`;
     },
 
     averageClickSpeed() {
-      return "2.05s";
+      var numOfQuestions = this.questions.length;
+      var sum = 0;
+      for (let i = 0; i < numOfQuestions; i++) {
+        var question = this.testResults[i];
+        if (!question) continue;
+        let [seconds, milliseconds] = question.time.split(":");
+        sum += parseInt(seconds) * 1000 + parseInt(milliseconds);
+      }
+      sum = Math.floor(sum / numOfQuestions);
+      var seconds = Math.floor(sum / 1000);
+      var minutes = sum % 100; // two digits for ms
+
+      return `${seconds}.${minutes}s`;
     },
 
     fastestCorrectGuess() {
-      return "0.28s";
+      var numOfQuestions = this.questions.length;
+      var fastest = null;
+      for (let i = 0; i < numOfQuestions; i++) {
+        var question = this.testResults[i];
+        if (!question) continue;
+        let [seconds, milliseconds] = question.time.split(":");
+        var time = parseInt(seconds) * 1000 + parseInt(milliseconds);
+        if (
+          question.selected === question.solution &&
+          (fastest === null || time < fastest)
+        )
+          fastest = time;
+      }
+
+      if (fastest === null) return "None";
+
+      var seconds = Math.floor(fastest / 1000);
+      var minutes = fastest % 100; // two digits
+      return `${seconds}.${minutes}s`;
     },
   },
 
@@ -234,7 +269,8 @@ p {
 }
 
 #stats .stat {
-  width: 250px;
+  min-width: 200px;
+  width: fit-content;
 }
 
 #stats .stat h1 {
