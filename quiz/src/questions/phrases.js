@@ -10,6 +10,10 @@ export const phrases = [
   "last name",
   "rewrite file",
   "count words",
+  "set timer",
+  "download images",
+  "translate word",
+
   // three word
   "date of birth",
   "number of items",
@@ -21,4 +25,7 @@ export const phrases = [
   "create new person",
   "delete last item",
   "upload all files",
+  "find last element",
+  "update profile picture",
+  "restore deleted documents",
 ];

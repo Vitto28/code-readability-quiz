@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>{{ shownTime }}</p>
+    <h1>{{ shownTime }}</h1>
   </div>
 </template>
 
@@ -65,8 +65,7 @@ export default {
 </script>
 
 <style scoped>
-p {
-  font-weight: bold;
-  font-size: x-large;
+h1 {
+  font-size: 2.5rem;
 }
 </style>

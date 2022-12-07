@@ -11,7 +11,11 @@
           <h1>{{ currentQuestion.phrase }}</h1>
         </div>
 
-        <v-btn @click="closePreview" size="x-large" class="bg-green-lighten-1">
+        <v-btn
+          @click="closePreview"
+          size="x-large"
+          class="bg-green-lighten-2 mt-8 text-white"
+        >
           Got it
         </v-btn>
       </div>
@@ -30,8 +34,6 @@
             <h1>{{ currentQuestion.phrase }}</h1>
           </div>
           <StopWatch :running="running" :resetWhenStart="true" />
-          <button @click="startT">start</button>
-          <button @click="stopT">stop</button>
         </div>
         <div id="options" class="mt-4">
           <v-card
@@ -53,7 +55,7 @@
         <v-btn
           id="next-btn"
           size="x-large"
-          class="bg-green-lighten-3 mt-16"
+          class="bg-green-lighten-2 mt-16 text-white"
           :disabled="currentQuestion.selected === null"
           @click="getNextQuestion"
         >
@@ -95,8 +97,10 @@
         <li>
           After clicking continue, four boxes will appear on-screen. Inside
           these boxes is the phrase you saw before... but not quite. They'll be
-          written either in camelCaseStyle or in kebab-case-style. Furthermore,
-          only one of them contains your original phrase! The rest have been
+          written either in
+          <b class="text-red-darken-2">camelCaseStyle</b> or in
+          <b class="text-red-darken-2">kebab-case-style</b>. Furthermore, only
+          one of them contains your original phrase! The rest have been
           <b>modified to say something different</b>, so watch out
         </li>
         <li>
@@ -164,7 +168,8 @@ export default {
 
       sampleQuestions: [
         {
-          phrase: "a sample phrase",
+          // phrase: "a sample phrase",
+          phrase: "restore deleted documents",
           options: [
             "a-sample-phase",
             "a-simple-phrase",
@@ -192,17 +197,9 @@ export default {
   },
 
   methods: {
-    // timer functions
-    stopT() {
-      this.running = false;
-    },
-    startT() {
-      this.running = true;
-    },
-
     // quiz methods
     setAnswer(idx) {
-      this.running.false;
+      this.running = false;
       this.currentQuestion.selected = idx;
     },
 
@@ -268,6 +265,10 @@ export default {
   justify-content: center;
 }
 
+b.text-red-darken-2 {
+  letter-spacing: 0.5px;
+}
+
 p,
 li {
   font-size: 1.25rem !important;
@@ -322,11 +323,21 @@ li {
 }
 
 #big-phrase {
-  background-color: red;
+  position: absolute;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+#big-phrase p {
+  font-size: 1.75rem !important;
+  margin-bottom: 28px !important;
+  margin-right: 16px !important;
+}
+
+#big-phrase h1 {
+  font-size: 5.5rem;
 }
 
 /* Options */
