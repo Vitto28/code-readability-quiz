@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-main>
-      <div id="container" class="mx-auto w-100 h-100">
+      <div id="container" class="mx-auto">
         <!-- Home -->
         <Home @state="setState" v-if="currentState === 'home'" />
 
@@ -112,7 +112,8 @@ export default {
   },
 
   async mounted() {
-    var q = await createQuizQuestions(phrases, 8);
+    // var q = await createQuizQuestions(phrases, 8);
+    var q = await createQuizQuestions(phrases, 40);
     setTimeout(() => {
       this.questions = q;
     }, 0);
@@ -223,6 +224,8 @@ p {
 #container {
   display: flex;
   justify-content: center;
+  width: 100vw;
+  height: 100vh;
 }
 
 .quiz {

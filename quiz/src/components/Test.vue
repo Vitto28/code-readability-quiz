@@ -60,19 +60,24 @@
             >{{ option }}</v-card
           >
         </div>
-        <v-btn
-          id="next-btn"
-          size="x-large"
-          class="bg-green-lighten-2 mt-16 text-white"
-          :disabled="currentQuestion.selected === null"
-          @click="getNextQuestion"
-        >
-          {{
-            currentQuestionIdx < activeQuestions.length - 1
-              ? "Next Question"
-              : "Finish"
-          }}
-        </v-btn>
+        <div class="mt-4" style="display: flex; justify-content: space-between">
+          <h1>
+            question {{ currentQuestionIdx + 1 }}/{{ activeQuestions.length }}
+          </h1>
+          <v-btn
+            id="next-btn"
+            size="x-large"
+            class="bg-green-lighten-2 text-white"
+            :disabled="currentQuestion.selected === null"
+            @click="getNextQuestion"
+          >
+            {{
+              currentQuestionIdx < activeQuestions.length - 1
+                ? "Next Question"
+                : "Finish"
+            }}
+          </v-btn>
+        </div>
       </div>
       <!-- End Actual test -->
     </div>
