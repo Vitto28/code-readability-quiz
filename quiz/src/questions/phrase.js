@@ -119,7 +119,7 @@ async function computePhraseVariation(
   const targetWordIdx = index || getRandomInt(words.length);
   var targetWord = words[targetWordIdx];
 
-  var badSpelledLike = ["unique", "reload", "update", "open", ];
+  var badSpelledLike = ["unique", "reload", "update", "open"];
 
   var params = {};
   if (targetWord.length < 5 || badSpelledLike.includes(targetWord)) {
@@ -138,7 +138,7 @@ async function computePhraseVariation(
 
         if (!editDistance) {
           words[targetWordIdx] = cleanString(
-            candidates[this.getRandomInt(candidates.length)].word
+            candidates[getRandomInt(candidates.length)].word
           );
         } else {
           // look for candidate that satisfies it
