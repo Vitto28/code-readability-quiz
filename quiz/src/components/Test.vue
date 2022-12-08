@@ -89,13 +89,30 @@
       v-if="this.state === 'instructions'"
       class="my-8 px-16"
     >
-      <h1 class="text-h2 mb-2">(Unskippable) Tutorial</h1>
+      <div
+        class="w-100"
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-end;
+        "
+      >
+        <h1 class="text-h2 mb-2">(Unskippable) Tutorial</h1>
+        <v-card id="warning" variant="tonal" title="Warning" width="900">
+          <template v-slot:text>
+            If you need to scroll to read all the text on this page, please
+            <b class="text-red-lighten-1">zoom out</b> until all content is
+            contained on your screen.
+          </template></v-card
+        >
+      </div>
+
       <p class="text-body-1 mb-8 mt-4">
         Let's do a quick run down of how the test works and how you're meant to
         complete it. You will need to repeat the following steps a certain
         amount of times:
       </p>
-      <ol id="list" class="px-8">
+      <ol id="list" class="w-100">
         <li>
           First of all, let's talk prep work. This test is meant to asses your
           <b>reaction and reading comprehension speed</b>. We want you to get
@@ -133,7 +150,15 @@
         </li>
       </ol>
 
-      <div id="bottom" class="mt-16">
+      <div
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        "
+        id="bottom"
+        class="mt-8 w-100"
+      >
         <v-card
           id="tip"
           title="Pro Tip"
@@ -309,6 +334,14 @@ export default {
 #tip .v-card-text {
   font-size: 1rem !important;
 }
+
+#warning .v-card-item {
+  padding-bottom: 0px !important;
+}
+
+#warning .v-card-text {
+  font-size: 1rem !important;
+}
 </style>
 
 <style scoped>
@@ -328,8 +361,10 @@ li {
   font-size: 1.25rem !important;
 }
 
-#list {
-  width: 1300px;
+#instructions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 li {
@@ -344,11 +379,6 @@ li {
   display: flex;
   justify-content: center;
   width: 100%;
-}
-
-#bottom {
-  display: flex;
-  justify-content: space-between;
 }
 
 #tip {
