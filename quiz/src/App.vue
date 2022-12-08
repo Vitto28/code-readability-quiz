@@ -112,8 +112,7 @@ export default {
   },
 
   async mounted() {
-    // var q = await createQuizQuestions(phrases, 8);
-    var q = await createQuizQuestions(phrases, 40);
+    var q = await createQuizQuestions(phrases, 10);
     setTimeout(() => {
       this.questions = q;
     }, 0);
