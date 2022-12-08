@@ -2,9 +2,9 @@
   <div id="home" class="py-16">
     <h1 class="text-h1 my-8">Code Readability Test</h1>
     <p class="mb-4">
-      This test is designed to measure how different word-sperator styles affect
-      the comprehension and correct identification of short sentences. More
-      specifically, styles commonly used in computer programming (like
+      This test is designed to measure how different word-separator styles
+      affect the comprehension and correct identification of short sentences.
+      More specifically, styles commonly used in computer programming (like
       kebab-case, camelCase, and so on).
     </p>
     <p class="mb-9">

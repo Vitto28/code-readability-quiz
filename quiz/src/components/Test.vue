@@ -124,7 +124,7 @@
         <li>
           Once you've selected one of the options, the timer stops. You'll be
           able to see if you chose the correct answer, and you can check the
-          timer on the upper-right corner of the screen to know how long you
+          timer in the upper-right corner of the screen to know how long you
           took to select it.
         </li>
         <li>
