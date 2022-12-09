@@ -162,7 +162,7 @@
         <v-card
           id="tip"
           title="Pro Tip"
-          text="Don't get discouraged if you choose and incorrect
+          text="Don't get discouraged if you choose an incorrect
             answer or take too long to choose which option to pick. Let that
             motivate you to perform better on the next one!"
         ></v-card>
